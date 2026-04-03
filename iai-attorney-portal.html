@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAI — Attorney Resource Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Barlow:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy: #0B1A30;
+  --navy2: #0F2040;
+  --navy3: #162947;
+  --gold: #B8965A;
+  --gold2: #D4AE72;
+  --gold3: #8A6E3E;
+  --parch: #F5F2ED;
+  --onyx: #07111F;
+  --gray: #6A6A7A;
+  --ltgray: #9A9AAA;
+  --green: #2D7A4F;
+}
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--onyx);
+  color: var(--parch);
+  min-height: 100vh;
+}
+
+/* ── LOGIN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--onyx);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(184,150,90,0.05) 0%, transparent 60%);
+  padding: 20px;
+}
+.login-box {
+  background: var(--navy);
+  border: 1px solid rgba(184,150,90,0.3);
+  border-radius: 4px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  animation: fadeUp 0.6s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.login-seal {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+.login-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.login-title {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--parch);
+  margin-bottom: 4px;
+}
+.login-sub {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--ltgray);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.login-intro {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--ltgray);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+.login-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--gold3);
+  margin: 0 auto 32px;
+}
+.field-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: left;
+  display: block;
+  margin-bottom: 6px;
+}
+.login-input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,90,0.25);
+  border-radius: 3px;
+  padding: 12px 16px;
+  color: var(--parch);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.login-input:focus { border-color: var(--gold); }
+.login-input::placeholder { color: var(--gray); }
+.login-btn {
+  width: 100%;
+  background: var(--gold);
+  border: none;
+  border-radius: 3px;
+  padding: 14px;
+  color: var(--navy);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+}
+.login-btn:hover { background: var(--gold2); }
+.login-error {
+  color: #e07070;
+  font-size: 12px;
+  margin-top: 12px;
+  display: none;
+}
+.login-note { font-size: 11px; color: var(--gray); margin-top: 24px; }
+.login-note a { color: var(--gold3); text-decoration: none; }
+
+/* ── PORTAL ── */
+#portal-screen { display: none; }
+
+.portal-header {
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  padding: 0 28px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-brand { display: flex; flex-direction: column; }
+.header-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.header-sub {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.header-right { display: flex; align-items: center; gap: 16px; }
+.atty-badge {
+  background: rgba(45,122,79,0.2);
+  border: 1px solid rgba(45,122,79,0.4);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #5DBF8A;
+  text-transform: uppercase;
+}
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(184,150,90,0.3);
+  border-radius: 3px;
+  padding: 6px 14px;
+  color: var(--ltgray);
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.logout-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Hero Band */
+.hero-band {
+  background: linear-gradient(135deg, var(--navy2) 0%, var(--navy3) 100%);
+  border-bottom: 1px solid rgba(184,150,90,0.2);
+  padding: 32px 28px;
+}
+.hero-band h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--parch);
+  margin-bottom: 6px;
+}
+.hero-band p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 15px;
+  color: var(--ltgray);
+  font-style: italic;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* Credentials Strip */
+.cred-strip {
+  background: rgba(184,150,90,0.08);
+  border-bottom: 1px solid rgba(184,150,90,0.15);
+  padding: 10px 28px;
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.cred-item {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cred-dot { color: var(--gold3); }
+
+/* Body Grid */
+.portal-body {
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.portal-section {
+  background: var(--navy);
+  border: 1px solid rgba(184,150,90,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.portal-section:hover { border-color: rgba(184,150,90,0.4); }
+.portal-section.wide { grid-column: span 2; }
+.portal-section.full { grid-column: span 3; }
+
+.section-header {
+  background: var(--navy2);
+  border-bottom: 1px solid rgba(184,150,90,0.2);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(184,150,90,0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.section-body { padding: 18px 20px; }
+
+/* Service Cards */
+.service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.service-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(184,150,90,0.12);
+  border-radius: 3px;
+  padding: 14px;
+  transition: all 0.2s;
+}
+.service-card:hover {
+  background: rgba(184,150,90,0.06);
+  border-color: rgba(184,150,90,0.3);
+}
+.service-icon { font-size: 20px; margin-bottom: 8px; }
+.service-name {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.service-desc { font-size: 12px; color: var(--ltgray); line-height: 1.4; }
+
+/* Resource Links */
+.resource-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(184,150,90,0.1);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: var(--parch);
+}
+.resource-item:hover {
+  background: rgba(184,150,90,0.08);
+  border-color: rgba(184,150,90,0.3);
+}
+.resource-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.resource-name { font-size: 13px; font-weight: 500; flex: 1; }
+.resource-tag {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(184,150,90,0.12);
+  color: var(--gold);
+}
+
+/* Bio Block */
+.bio-block {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.bio-seal {
+  width: 56px;
+  height: 56px;
+  background: rgba(184,150,90,0.15);
+  border: 1px solid rgba(184,150,90,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.bio-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--parch);
+  margin-bottom: 4px;
+}
+.bio-title {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.bio-creds {
+  font-size: 11px;
+  color: var(--ltgray);
+  line-height: 1.6;
+}
+
+/* Request Form */
+.req-form { display: flex; flex-direction: column; gap: 12px; }
+.req-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.req-label {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.req-input, .req-select, .req-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,90,0.2);
+  border-radius: 3px;
+  padding: 10px 12px;
+  color: var(--parch);
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.req-input:focus, .req-select:focus, .req-textarea:focus { border-color: var(--gold); }
+.req-input::placeholder, .req-textarea::placeholder { color: var(--gray); }
+.req-select option { background: var(--navy2); }
+.req-textarea { resize: vertical; min-height: 80px; }
+.req-btn {
+  background: var(--gold);
+  border: none;
+  border-radius: 3px;
+  padding: 12px 24px;
+  color: var(--navy);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.req-btn:hover { background: var(--gold2); }
+.req-success {
+  background: rgba(45,122,79,0.15);
+  border: 1px solid rgba(45,122,79,0.3);
+  border-radius: 3px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #5DBF8A;
+  display: none;
+}
+
+/* Contact block */
+.contact-block { display: flex; flex-direction: column; gap: 10px; }
+.contact-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.contact-label {
+  font-size: 9px; letter-spacing: 1px; color: var(--gold);
+  text-transform: uppercase; width: 70px; flex-shrink: 0;
+}
+
+/* Footer */
+.portal-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--gray);
+  border-top: 1px solid rgba(184,150,90,0.1);
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .portal-body { grid-template-columns: 1fr 1fr; }
+  .portal-section.wide, .portal-section.full { grid-column: span 2; }
+  .service-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .portal-body { grid-template-columns: 1fr; padding: 16px; }
+  .portal-section.wide, .portal-section.full { grid-column: span 1; }
+  .req-row { grid-template-columns: 1fr; }
+  .cred-strip { gap: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-seal">⚖️</div>
+    <div class="login-logo">Integrity Assessments Investigations</div>
+    <div class="login-title">Attorney Resource Portal</div>
+    <div class="login-sub">Defense Counsel Access</div>
+    <div class="login-intro">Private investigative resources and EyeDetect® credibility assessment services exclusively for criminal defense attorneys.</div>
+    <div class="login-divider"></div>
+    <label class="field-label">Access Code</label>
+    <input type="password" id="pass-input" class="login-input" placeholder="Enter attorney access code" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Access Portal</button>
+    <div class="login-error" id="login-error">⚠ Invalid access code. Contact admin@iahotx.com</div>
+    <div class="login-note">To request access: <a href="mailto:admin@iahotx.com">admin@iahotx.com</a> · iahotx.com · TX Lic. A19944401</div>
+  </div>
+</div>
+
+<!-- PORTAL -->
+<div id="portal-screen">
+
+  <header class="portal-header">
+    <div class="header-brand">
+      <div class="header-logo">IAI</div>
+      <div class="header-sub">Attorney Portal</div>
+    </div>
+    <div class="header-right">
+      <div class="atty-badge">✓ Defense Counsel</div>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="hero-band">
+    <h1>Attorney Resource Center</h1>
+    <p>Integrity Assessments Investigations provides tri-court-approved private investigative services to criminal defense counsel throughout Harris County, Fort Bend County, and the Southern District of Texas.</p>
+  </div>
+
+  <div class="cred-strip">
+    <div class="cred-item"><span class="cred-dot">●</span> CJA Panel Vendor — S.D. Texas</div>
+    <div class="cred-item"><span class="cred-dot">●</span> Harris County Court Approved</div>
+    <div class="cred-item"><span class="cred-dot">●</span> Fort Bend County Court Approved</div>
+    <div class="cred-item"><span class="cred-dot">●</span> TX Lic. A19944401</div>
+    <div class="cred-item"><span class="cred-dot">●</span> Minority Women-Owned Business</div>
+  </div>
+
+  <div class="portal-body">
+
+    <!-- Services -->
+    <div class="portal-section full">
+      <div class="section-header">
+        <div class="section-icon">🔍</div>
+        <div class="section-title">IAI Services for Defense Counsel</div>
+      </div>
+      <div class="section-body">
+        <div class="service-grid">
+          <div class="service-card">
+            <div class="service-icon">🧠</div>
+            <div class="service-name">EyeDetect® Credibility Assessment</div>
+            <div class="service-desc">Court-admissible credibility testing via Converus EyeDetect® technology. Not a polygraph — ocular-motor analysis with 86%+ accuracy. Ideal for pre-trial client assessment.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🔎</div>
+            <div class="service-name">Criminal Defense Investigation</div>
+            <div class="service-desc">Witness interviews, scene documentation, evidence gathering, and alibi verification for active criminal defense cases. CJA and court-funded cases accepted.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📍</div>
+            <div class="service-name">Subject Locate & Background</div>
+            <div class="service-desc">Locate witnesses, victims, and persons of interest. Comprehensive background investigations for defense strategy development.</div>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🎓</div>
+            <div class="service-name">Expert Consultation</div>
+            <div class="service-desc">Dr. Walwyn available as expert consultant — retired International Police Commissioner, USVI Deputy Commissioner, and Texas Police Chief (2026). Ph.D., Summa Cum Laude.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Downloads -->
+    <div class="portal-section wide">
+      <div class="section-header">
+        <div class="section-icon">📄</div>
+        <div class="section-title">Downloads & Resources</div>
+      </div>
+      <div class="section-body">
+        <ul class="resource-list">
+          <li class="resource-item">
+            <div class="resource-dot"></div>
+            <span class="resource-name">IAI Capability Statement</span>
+            <span class="resource-tag">PDF</span>
+          </li>
+          <li class="resource-item">
+            <div class="resource-dot"></div>
+            <span class="resource-name">EyeDetect® Information Sheet (Converus)</span>
+            <span class="resource-tag">PDF</span>
+          </li>
+          <li class="resource-item">
+            <div class="resource-dot"></div>
+            <span class="resource-name">CJA Vendor Authorization — S.D. Texas</span>
+            <span class="resource-tag">PDF</span>
+          </li>
+          <li class="resource-item">
+            <div class="resource-dot"></div>
+            <span class="resource-name">Dr. Walwyn Executive Bio & Credentials</span>
+            <span class="resource-tag">PDF</span>
+          </li>
+          <li class="resource-item">
+            <div class="resource-dot"></div>
+            <span class="resource-name">IAI Service Rate Schedule</span>
+            <span class="resource-tag">PDF</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Lead Investigator Bio -->
+    <div class="portal-section">
+      <div class="section-header">
+        <div class="section-icon">👤</div>
+        <div class="section-title">Lead Investigator</div>
+      </div>
+      <div class="section-body">
+        <div class="bio-block">
+          <div class="bio-seal">🏅</div>
+          <div>
+            <div class="bio-name">Dr. Celvin G. Walwyn</div>
+            <div class="bio-title">Executive Director & Lead Investigator</div>
+            <div class="bio-creds">
+              Ph.D., Public Safety / Police Leadership<br>
+              Summa Cum Laude with Highest Honors<br><br>
+              Retired International Police Commissioner<br>
+              Federation of St. Kitts & Nevis<br><br>
+              Retired USVI Deputy Commissioner<br>
+              Retired Texas Police Chief (2026)<br><br>
+              EyeDetect® Examiner (Converus)<br>
+              PCSOT Certified · Active TCOLE License
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Request Form -->
+    <div class="portal-section wide">
+      <div class="section-header">
+        <div class="section-icon">📝</div>
+        <div class="section-title">Request Investigative Services</div>
+      </div>
+      <div class="section-body">
+        <div class="req-form">
+          <div class="req-row">
+            <div>
+              <label class="req-label">Attorney Name</label>
+              <input type="text" class="req-input" id="r-name" placeholder="Full name">
+            </div>
+            <div>
+              <label class="req-label">Bar Number</label>
+              <input type="text" class="req-input" id="r-bar" placeholder="TX Bar #">
+            </div>
+          </div>
+          <div class="req-row">
+            <div>
+              <label class="req-label">Firm Name</label>
+              <input type="text" class="req-input" id="r-firm" placeholder="Law firm">
+            </div>
+            <div>
+              <label class="req-label">Email</label>
+              <input type="email" class="req-input" id="r-email" placeholder="your@lawfirm.com">
+            </div>
+          </div>
+          <div class="req-row">
+            <div>
+              <label class="req-label">Service Requested</label>
+              <select class="req-select" id="r-service">
+                <option value="">— Select Service —</option>
+                <option>EyeDetect® Credibility Assessment</option>
+                <option>Criminal Defense Investigation</option>
+                <option>Subject Locate & Background</option>
+                <option>Expert Consultation</option>
+                <option>Multiple Services</option>
+              </select>
+            </div>
+            <div>
+              <label class="req-label">Court / Jurisdiction</label>
+              <select class="req-select" id="r-court">
+                <option value="">— Select Court —</option>
+                <option>Harris County</option>
+                <option>Fort Bend County</option>
+                <option>S.D. Texas (Federal / CJA)</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="req-label">Case Description / Notes</label>
+            <textarea class="req-textarea" id="r-notes" placeholder="Brief description of the case and investigative needs..."></textarea>
+          </div>
+          <div class="req-success" id="req-success">
+            ✓ Request submitted. IAI will contact you within 1 business day at the email provided.
+          </div>
+          <button class="req-btn" onclick="submitReq()">Submit Request</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="portal-section">
+      <div class="section-header">
+        <div class="section-icon">📞</div>
+        <div class="section-title">Direct Contact</div>
+      </div>
+      <div class="section-body">
+        <div class="contact-block">
+          <div class="contact-row">
+            <span class="contact-label">Email</span>
+            <span>admin@iahotx.com</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">Website</span>
+            <span>iahotx.com</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">License</span>
+            <span>TX A19944401</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">County</span>
+            <span>Harris County, Texas</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">CJA</span>
+            <span>S.D. Texas Panel Vendor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /portal-body -->
+
+  <div class="portal-footer">
+    INTEGRITY ASSESSMENTS INVESTIGATIONS · HARRIS COUNTY, TEXAS · TX LIC. A19944401 · ATTORNEY ACCESS — CONFIDENTIAL
+  </div>
+
+</div><!-- /portal-screen -->
+
+<script>
+const STAFF_PASS = 'iai2024secure';
+const ATTY_PASS  = 'iaiatty2026';
+
+function doLogin() {
+  const val = document.getElementById('pass-input').value.trim();
+  if (val === STAFF_PASS || val === ATTY_PASS) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('portal-screen').style.display = 'block';
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('pass-input').value = '';
+    document.getElementById('pass-input').focus();
+  }
+}
+
+function doLogout() {
+  document.getElementById('portal-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pass-input').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function submitReq() {
+  const name = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const service = document.getElementById('r-service').value;
+  if (!name || !email || !service) {
+    alert('Please fill in your name, email, and service requested.');
+    return;
+  }
+  document.getElementById('req-success').style.display = 'block';
+  document.getElementById('r-name').value = '';
+  document.getElementById('r-bar').value = '';
+  document.getElementById('r-firm').value = '';
+  document.getElementById('r-email').value = '';
+  document.getElementById('r-service').value = '';
+  document.getElementById('r-court').value = '';
+  document.getElementById('r-notes').value = '';
+}
+</script>
+</body>
+</html>
