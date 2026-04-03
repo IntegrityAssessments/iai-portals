@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAI — Staff Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy: #0B1A30; --navy2: #0F2040; --navy3: #162947;
+  --gold: #B8965A; --gold2: #D4AE72; --gold3: #8A6E3E;
+  --parch: #F5F2ED; --onyx: #07111F;
+  --gray: #6A6A7A; --ltgray: #9A9AAA;
+}
+body { font-family: 'Barlow', sans-serif; background: var(--onyx); color: var(--parch); min-height: 100vh; }
+#login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--onyx); padding: 20px;
+}
+.login-box {
+  background: var(--navy); border: 1px solid rgba(184,150,90,0.3); border-radius: 4px;
+  padding: 48px 40px; width: 100%; max-width: 420px; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.login-logo { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+.login-title { font-family: 'Cinzel', serif; font-size: 26px; font-weight: 700; color: var(--parch); margin-bottom: 4px; }
+.login-sub { font-size: 11px; letter-spacing: 2px; color: var(--ltgray); text-transform: uppercase; margin-bottom: 36px; }
+.login-divider { width: 40px; height: 1px; background: var(--gold3); margin: 0 auto 36px; }
+.field-label { font-size: 9px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; text-align: left; display: block; margin-bottom: 6px; }
+.login-input {
+  width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(184,150,90,0.25);
+  border-radius: 3px; padding: 12px 16px; color: var(--parch); font-family: 'Barlow', sans-serif;
+  font-size: 14px; margin-bottom: 20px; outline: none;
+}
+.login-input:focus { border-color: var(--gold); }
+.login-input::placeholder { color: var(--gray); }
+.login-btn {
+  width: 100%; background: var(--gold); border: none; border-radius: 3px; padding: 14px;
+  color: var(--navy); font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 2px; cursor: pointer; margin-top: 4px;
+}
+.login-btn:hover { background: var(--gold2); }
+.login-error { color: #e07070; font-size: 12px; margin-top: 12px; display: none; }
+.login-note { font-size: 11px; color: var(--gray); margin-top: 24px; }
+#portal-screen { display: none; }
+.portal-header {
+  background: var(--navy); border-bottom: 2px solid var(--gold); padding: 0 28px;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-brand { display: flex; flex-direction: column; }
+.header-logo { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; color: var(--parch); }
+.header-sub { font-size: 9px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+.header-right { display: flex; align-items: center; gap: 20px; }
+.staff-badge { background: rgba(184,150,90,0.15); border: 1px solid rgba(184,150,90,0.3); border-radius: 20px; padding: 4px 14px; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
+.logout-btn { background: transparent; border: 1px solid rgba(184,150,90,0.3); border-radius: 3px; padding: 6px 14px; color: var(--ltgray); font-family: 'Barlow', sans-serif; font-size: 11px; cursor: pointer; }
+.logout-btn:hover { border-color: var(--gold); color: var(--gold); }
+.welcome-banner { background: linear-gradient(135deg, var(--navy2) 0%, var(--navy3) 100%); border-bottom: 1px solid rgba(184,150,90,0.2); padding: 28px; display: flex; align-items: center; justify-content: space-between; }
+.welcome-text h2 { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 600; color: var(--parch); margin-bottom: 4px; }
+.welcome-text p { font-size: 13px; color: var(--ltgray); }
+.welcome-date { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold); text-align: right; }
+.portal-body { padding: 28px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; max-width: 1200px; margin: 0 auto; }
+.portal-section { background: var(--navy); border: 1px solid rgba(184,150,90,0.2); border-radius: 4px; overflow: hidden; }
+.portal-section.wide { grid-column: span 2; }
+.portal-section.full { grid-column: span 3; }
+.section-header { background: var(--navy2); border-bottom: 1px solid rgba(184,150,90,0.2); padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+.section-icon { width: 28px; height: 28px; background: rgba(184,150,90,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.section-title { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
+.section-body { padding: 18px 20px; }
+.resource-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.resource-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(184,150,90,0.1); border-radius: 3px; color: var(--parch); }
+.resource-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.resource-name { font-size: 13px; font-weight: 500; flex: 1; }
+.resource-tag { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; background: rgba(184,150,90,0.12); color: var(--gold); }
+.resource-tag.new { background: rgba(45,122,79,0.2); color: #5DBF8A; }
+.resource-tag.required { background: rgba(139,42,42,0.2); color: #E07070; }
+.announce-list { display: flex; flex-direction: column; gap: 12px; }
+.announce-item { padding: 12px 14px; border-left: 3px solid var(--gold3); background: rgba(255,255,255,0.02); border-radius: 0 3px 3px 0; }
+.announce-item.urgent { border-left-color: #E07070; }
+.announce-item.info { border-left-color: #4A8FD4; }
+.announce-date { font-size: 9px; letter-spacing: 1px; color: var(--ltgray); text-transform: uppercase; margin-bottom: 4px; }
+.announce-text { font-size: 13px; line-height: 1.5; color: var(--parch); }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(184,150,90,0.1); border-radius: 3px; padding: 14px; text-align: center; }
+.stat-num { font-family: 'Cinzel', serif; font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 9px; letter-spacing: 1px; color: var(--ltgray); text-transform: uppercase; }
+.contact-block { display: flex; flex-direction: column; gap: 10px; }
+.contact-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.contact-label { font-size: 9px; letter-spacing: 1px; color: var(--gold); text-transform: uppercase; width: 80px; flex-shrink: 0; }
+.contact-val { color: var(--parch); }
+.portal-footer { text-align: center; padding: 20px; font-size: 10px; letter-spacing: 1px; color: var(--gray); border-top: 1px solid rgba(184,150,90,0.1); margin-top: 8px; }
+@media (max-width: 900px) { .portal-body { grid-template-columns: 1fr 1fr; } .portal-section.wide, .portal-section.full { grid-column: span 2; } }
+@media (max-width: 600px) { .portal-body { grid-template-columns: 1fr; padding: 16px; } .portal-section.wide, .portal-section.full { grid-column: span 1; } .welcome-banner { flex-direction: column; gap: 10px; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Integrity Assessments Investigations</div>
+    <div class="login-title">Staff Portal</div>
+    <div class="login-sub">Authorized Personnel Only</div>
+    <div class="login-divider"></div>
+    <label class="field-label">Access Code</label>
+    <input type="password" id="pass-input" class="login-input" placeholder="Enter staff passphrase">
+    <button class="login-btn" id="login-btn">Enter Portal</button>
+    <div class="login-error" id="login-error">&#9888; Invalid access code. Please try again.</div>
+    <div class="login-note">TX Lic. A19944401 &middot; admin&#64;iahotx.com</div>
+  </div>
+</div>
+
+<div id="portal-screen">
+  <header class="portal-header">
+    <div class="header-brand">
+      <div class="header-logo">IAI</div>
+      <div class="header-sub">Staff Portal</div>
+    </div>
+    <div class="header-right">
+      <div class="staff-badge">&#128274; Secure Access</div>
+      <button class="logout-btn" id="logout-btn">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <h2>Welcome, IAI Team</h2>
+      <p>Integrity Assessments Investigations &middot; Harris County, Texas &middot; TX Lic. A19944401</p>
+    </div>
+    <div class="welcome-date" id="portal-date"></div>
+  </div>
+
+  <div class="portal-body">
+
+    <div class="portal-section wide">
+      <div class="section-header"><div class="section-icon">&#128218;</div><div class="section-title">Training Modules</div></div>
+      <div class="section-body">
+        <ul class="resource-list">
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Module 1 — IAI Operations &amp; Ethics Overview</span><span class="resource-tag required">Required</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Module 2 — Criminal Defense Investigation Procedures</span><span class="resource-tag required">Required</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Module 3 — EyeDetect&#174; Examiner Protocol (Converus)</span><span class="resource-tag required">Required</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Module 4 — Subject Locate &amp; Background Investigation</span><span class="resource-tag"></span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Module 5 — Report Writing &amp; Court Documentation</span><span class="resource-tag new">New</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="portal-section">
+      <div class="section-header"><div class="section-icon">&#128202;</div><div class="section-title">At a Glance</div></div>
+      <div class="section-body">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Team Members</div></div>
+          <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Court Approvals</div></div>
+          <div class="stat-card"><div class="stat-num">CJA</div><div class="stat-label">Federal Panel</div></div>
+          <div class="stat-card"><div class="stat-num">TX</div><div class="stat-label">Lic. A19944401</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-section">
+      <div class="section-header"><div class="section-icon">&#128203;</div><div class="section-title">Policy Documents</div></div>
+      <div class="section-body">
+        <ul class="resource-list">
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">IAI Employee Handbook</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Confidentiality Agreement</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Evidence Handling Protocol</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Court Appearance Guidelines</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="portal-section">
+      <div class="section-header"><div class="section-icon">&#9989;</div><div class="section-title">Forms &amp; Checklists</div></div>
+      <div class="section-body">
+        <ul class="resource-list">
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">New Case Intake Form</span><span class="resource-tag new">New</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Subject Locate Worksheet</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">Interview Question Guide</span></li>
+          <li class="resource-item"><div class="resource-dot"></div><span class="resource-name">EyeDetect&#174; Pre-Exam Checklist</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="portal-section wide">
+      <div class="section-header"><div class="section-icon">&#128227;</div><div class="section-title">Announcements</div></div>
+      <div class="section-body">
+        <div class="announce-list">
+          <div class="announce-item urgent">
+            <div class="announce-date">April 2026</div>
+            <div class="announce-text">IAI is now fully operational. All staff complete required training modules before accepting case assignments. Contact Dr. Walwyn with questions.</div>
+          </div>
+          <div class="announce-item info">
+            <div class="announce-date">April 2026</div>
+            <div class="announce-text">CJA Panel Vendor status active — Southern District of Texas. Harris County and Fort Bend County court approvals confirmed.</div>
+          </div>
+          <div class="announce-item">
+            <div class="announce-date">April 2026</div>
+            <div class="announce-text">Staff Training Portal passphrase remains: <strong>iai2024secure</strong>. Do not share outside the team.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-section">
+      <div class="section-header"><div class="section-icon">&#128222;</div><div class="section-title">Key Contacts</div></div>
+      <div class="section-body">
+        <div class="contact-block">
+          <div class="contact-row"><span class="contact-label">Director</span><span class="contact-val">Dr. Celvin G. Walwyn</span></div>
+          <div class="contact-row"><span class="contact-label">Manager</span><span class="contact-val">A.D. Walwyn, M.Sc.</span></div>
+          <div class="contact-row"><span class="contact-label">Investigator</span><span class="contact-val">Earl A. Campbell, B.Sc.</span></div>
+          <div class="contact-row"><span class="contact-label">Email</span><span class="contact-val">admin&#64;iahotx.com</span></div>
+          <div class="contact-row"><span class="contact-label">Website</span><span class="contact-val">iahotx.com</span></div>
+          <div class="contact-row"><span class="contact-label">License</span><span class="contact-val">TX A19944401</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="portal-footer">
+    INTEGRITY ASSESSMENTS INVESTIGATIONS &middot; HARRIS COUNTY, TEXAS &middot; TX LIC. A19944401 &middot; CONFIDENTIAL — STAFF USE ONLY
+  </div>
+</div>
+
+<script>
+var PASS = 'iai2024secure';
+
+window.addEventListener('load', function() {
+  document.getElementById('login-btn').addEventListener('click', function() {
+    doLogin();
+  });
+  document.getElementById('pass-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    doLogout();
+  });
+});
+
+function doLogin() {
+  var val = document.getElementById('pass-input').value.trim();
+  if (val === PASS) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('portal-screen').style.display = 'block';
+    setDate();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('pass-input').value = '';
+    document.getElementById('pass-input').focus();
+  }
+}
+
+function doLogout() {
+  document.getElementById('portal-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pass-input').value = '';
+}
+
+function setDate() {
+  var now = new Date();
+  var el = document.getElementById('portal-date');
+  if (el) el.textContent = now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+</script>
+</body>
+</html>
