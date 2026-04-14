@@ -222,7 +222,7 @@ footer{background:var(--navy);border-top:1px solid rgba(201,168,76,.15);padding:
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-var PASS = 'iai2024secure';
+var PASS = 'iai2024secure'; // login check
 window.addEventListener('load', function() {
   document.getElementById('loginBtn').addEventListener('click', doLogin);
   document.getElementById('passInput').addEventListener('keydown', function(e) {
@@ -233,7 +233,7 @@ window.addEventListener('load', function() {
 });
 function doLogin() {
   var val = document.getElementById('passInput').value.trim();
-  if (val === PASS) {
+  if (val.toLowerCase() === PASS.toLowerCase()) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('portalScreen').style.display = 'block';
   } else {
