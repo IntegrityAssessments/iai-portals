@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAI — Attorney Outreach Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Barlow:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy:   #0B1A30;
+  --navy2:  #0F2040;
+  --gold:   #B8965A;
+  --gold2:  #D4AE72;
+  --parch:  #F5F2ED;
+  --onyx:   #0D1117;
+  --steel:  #4A8FD4;
+  --gray:   #6A6A7A;
+  --ltgray: #9A9AAA;
+  --green:  #2D7A4F;
+  --amber:  #C47A1A;
+  --red:    #8B2A2A;
+  --white:  #FFFFFF;
+}
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--onyx);
+  color: var(--parch);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--parch);
+  letter-spacing: 2px;
+}
+.header-sub {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.header-stats {
+  display: flex;
+  gap: 32px;
+}
+.stat-item {
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--ltgray);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Layout ── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--navy);
+  border-right: 1px solid rgba(184,150,90,0.15);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 64px);
+}
+
+.sidebar-section-title {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sidebar-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(184,150,90,0.2);
+}
+
+.btn {
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-gold:hover { background: var(--gold2); }
+.btn-gold:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-outline {
+  background: transparent;
+  color: var(--parch);
+  border: 1px solid rgba(245,242,237,0.2);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+.btn-navy {
+  background: rgba(255,255,255,0.05);
+  color: var(--ltgray);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.btn-navy:hover { background: rgba(184,150,90,0.1); color: var(--gold); border-color: var(--gold); }
+.btn-navy.active { background: rgba(184,150,90,0.15); color: var(--gold); border-color: var(--gold); }
+
+.filter-group { display: flex; flex-direction: column; gap: 6px; }
+
+/* Search */
+.search-box {
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,90,0.2);
+  color: var(--parch);
+  padding: 10px 14px 10px 36px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-box input:focus { border-color: var(--gold); }
+.search-box input::placeholder { color: var(--ltgray); }
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ltgray);
+  font-size: 13px;
+}
+
+/* Add attorney form */
+.add-form { display: flex; flex-direction: column; gap: 8px; }
+.add-form input, .add-form select, .add-form textarea {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,90,0.2);
+  color: var(--parch);
+  padding: 9px 12px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+.add-form input:focus, .add-form select:focus, .add-form textarea:focus {
+  border-color: var(--gold);
+}
+.add-form input::placeholder { color: var(--ltgray); }
+.add-form select option { background: var(--navy); }
+.add-form textarea { resize: vertical; min-height: 60px; }
+.form-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--ltgray);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+/* ── Main Content ── */
+.main-content {
+  padding: 24px 32px;
+  overflow-y: auto;
+  max-height: calc(100vh - 64px);
+}
+
+/* AI Research Panel */
+.ai-panel {
+  background: rgba(184,150,90,0.06);
+  border: 1px solid rgba(184,150,90,0.2);
+  border-left: 3px solid var(--gold);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+.ai-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ai-panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--parch);
+}
+.ai-badge {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 3px 8px;
+  font-weight: 700;
+}
+.ai-input-row {
+  display: flex;
+  gap: 10px;
+}
+.ai-input-row input {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,90,0.3);
+  color: var(--parch);
+  padding: 10px 14px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 12px;
+  outline: none;
+}
+.ai-input-row input:focus { border-color: var(--gold); }
+.ai-input-row input::placeholder { color: var(--ltgray); }
+.ai-results {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(245,242,237,0.8);
+  font-family: 'Crimson Pro', serif;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+}
+.ai-results.visible { display: block; }
+.ai-loading {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+.ai-loading.visible { display: flex; }
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(184,150,90,0.3);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Attorney Cards Grid */
+.attorneys-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.attorneys-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--parch);
+}
+.view-toggle {
+  display: flex;
+  gap: 4px;
+}
+.view-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--ltgray);
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+.view-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+.attorneys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+.attorneys-list { display: flex; flex-direction: column; gap: 8px; }
+
+/* Attorney Card */
+.attorney-card {
+  background: var(--navy);
+  border: 1px solid rgba(184,150,90,0.1);
+  padding: 20px;
+  transition: all 0.25s;
+  cursor: pointer;
+  position: relative;
+}
+.attorney-card:hover {
+  border-color: rgba(184,150,90,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.attorney-card.list-view {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+}
+
+.card-priority {
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+}
+.priority-1 { background: #C41E3A; }
+.priority-2 { background: var(--gold); }
+.priority-3 { background: var(--steel); }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding-left: 8px;
+}
+.attorney-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--parch);
+  margin-bottom: 3px;
+}
+.attorney-firm {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.status-badge {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.status-new      { background: rgba(74,143,212,0.15); color: var(--steel); border: 1px solid rgba(74,143,212,0.3); }
+.status-sent     { background: rgba(184,150,90,0.15); color: var(--gold); border: 1px solid rgba(184,150,90,0.3); }
+.status-replied  { background: rgba(45,122,79,0.15); color: #4CAF80; border: 1px solid rgba(45,122,79,0.3); }
+.status-meeting  { background: rgba(196,122,26,0.15); color: #E8A84A; border: 1px solid rgba(196,122,26,0.3); }
+.status-client   { background: rgba(45,122,79,0.25); color: #4CAF80; border: 1px solid rgba(45,122,79,0.5); }
+.status-declined { background: rgba(139,42,42,0.15); color: #C47A7A; border: 1px solid rgba(139,42,42,0.3); }
+
+.card-meta {
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ltgray);
+}
+.meta-icon { font-size: 10px; color: var(--gold); flex-shrink: 0; }
+
+.card-tags {
+  padding-left: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+.tag {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--ltgray);
+}
+.tag.federal { border-color: rgba(74,143,212,0.4); color: var(--steel); }
+.tag.state   { border-color: rgba(184,150,90,0.4); color: var(--gold); }
+.tag.cja     { border-color: rgba(45,122,79,0.4); color: #4CAF80; }
+
+.card-actions {
+  padding-left: 8px;
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+.card-btn {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.card-btn-gold { background: var(--gold); color: var(--navy); }
+.card-btn-gold:hover { background: var(--gold2); }
+.card-btn-outline { background: transparent; color: var(--ltgray); border: 1px solid rgba(255,255,255,0.15); }
+.card-btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--navy2);
+  border: 1px solid rgba(184,150,90,0.3);
+  border-top: 3px solid var(--gold);
+  width: 620px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 32px;
+}
+.modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  color: var(--parch);
+  margin-bottom: 4px;
+}
+.modal-firm {
+  font-size: 12px;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+.modal-section { margin-bottom: 20px; }
+.modal-section-title {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(184,150,90,0.2);
+}
+.modal-field { margin-bottom: 12px; }
+.modal-field label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--ltgray);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.modal-field input, .modal-field select, .modal-field textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(184,150,90,0.2);
+  color: var(--parch);
+  padding: 9px 12px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 12px;
+  outline: none;
+}
+.modal-field input:focus, .modal-field select:focus, .modal-field textarea:focus {
+  border-color: var(--gold);
+}
+.modal-field select option { background: var(--navy2); }
+.modal-field textarea { resize: vertical; min-height: 80px; }
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(184,150,90,0.15);
+}
+.modal-btn {
+  font-family: 'Barlow', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 10px 24px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.modal-btn-gold { background: var(--gold); color: var(--navy); }
+.modal-btn-gold:hover { background: var(--gold2); }
+.modal-btn-cancel { background: transparent; color: var(--ltgray); border: 1px solid rgba(255,255,255,0.15); }
+.modal-btn-cancel:hover { border-color: var(--ltgray); color: var(--parch); }
+
+/* AI Research in modal */
+.modal-ai-result {
+  background: rgba(184,150,90,0.05);
+  border: 1px solid rgba(184,150,90,0.2);
+  padding: 14px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(245,242,237,0.85);
+  margin-top: 8px;
+  display: none;
+}
+.modal-ai-result.visible { display: block; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  color: var(--ltgray);
+}
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+.empty-state-title {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  color: var(--parch);
+  margin-bottom: 8px;
+}
+
+/* Personalization helper */
+.personalize-box {
+  background: rgba(74,143,212,0.07);
+  border: 1px solid rgba(74,143,212,0.2);
+  border-left: 3px solid var(--steel);
+  padding: 14px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(245,242,237,0.8);
+  font-family: 'Crimson Pro', serif;
+  display: none;
+}
+.personalize-box.visible { display: block; }
+
+/* Progress bar */
+.progress-bar {
+  background: rgba(255,255,255,0.05);
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  transition: width 0.5s ease;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(184,150,90,0.3); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div>
+      <div class="header-logo">IAI</div>
+      <div class="header-sub">Attorney Outreach Tracker</div>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-sent">0</div>
+      <div class="stat-label">Sent</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-replied">0</div>
+      <div class="stat-label">Replied</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-clients">0</div>
+      <div class="stat-label">Clients</div>
+    </div>
+  </div>
+</header>
+
+<div class="app-layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+
+    <!-- AI Research -->
+    <div>
+      <div class="sidebar-section-title">AI Attorney Research</div>
+      <div style="font-size:11px; color:var(--ltgray); margin-bottom:10px; line-height:1.6;">
+        Ask the AI to research attorneys, suggest personalizations, or draft custom opening lines.
+      </div>
+      <div class="search-box" style="margin-bottom:8px;">
+        <span class="search-icon">⚲</span>
+        <input type="text" id="ai-query" placeholder="e.g. Top federal defense firms in Houston..." />
+      </div>
+      <button class="btn btn-gold" id="ai-research-btn" onclick="runAIResearch()">
+        ⚡ Research with AI
+      </button>
+    </div>
+
+    <!-- Add Attorney -->
+    <div>
+      <div class="sidebar-section-title">Add Attorney</div>
+      <div class="add-form">
+        <div>
+          <div class="form-label">Full Name *</div>
+          <input type="text" id="f-name" placeholder="e.g. John A. Smith" />
+        </div>
+        <div>
+          <div class="form-label">Firm Name *</div>
+          <input type="text" id="f-firm" placeholder="e.g. Smith & Associates" />
+        </div>
+        <div>
+          <div class="form-label">Email</div>
+          <input type="text" id="f-email" placeholder="attorney@firm.com" />
+        </div>
+        <div>
+          <div class="form-label">County</div>
+          <select id="f-county">
+            <option value="Harris">Harris County</option>
+            <option value="Fort Bend">Fort Bend County</option>
+            <option value="Both">Both</option>
+          </select>
+        </div>
+        <div>
+          <div class="form-label">Practice Focus</div>
+          <select id="f-focus">
+            <option value="Federal">Federal (SDTX)</option>
+            <option value="State">State Court</option>
+            <option value="Both">Federal &amp; State</option>
+            <option value="CJA">CJA Appointed</option>
+          </select>
+        </div>
+        <div>
+          <div class="form-label">Priority</div>
+          <select id="f-priority">
+            <option value="1">Priority 1 — High</option>
+            <option value="2">Priority 2 — Medium</option>
+            <option value="3">Priority 3 — Standard</option>
+          </select>
+        </div>
+        <div>
+          <div class="form-label">Notes</div>
+          <textarea id="f-notes" placeholder="Practice specialty, referral source, known cases..."></textarea>
+        </div>
+        <button class="btn btn-gold" onclick="addAttorney()">+ Add to List</button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div>
+      <div class="sidebar-section-title">Filter & Sort</div>
+      <div class="filter-group">
+        <button class="btn btn-navy active" onclick="filterAttorneys('all', this)">All Attorneys</button>
+        <button class="btn btn-navy" onclick="filterAttorneys('new', this)">Not Yet Contacted</button>
+        <button class="btn btn-navy" onclick="filterAttorneys('sent', this)">Email Sent</button>
+        <button class="btn btn-navy" onclick="filterAttorneys('replied', this)">Replied</button>
+        <button class="btn btn-navy" onclick="filterAttorneys('meeting', this)">Meeting Scheduled</button>
+        <button class="btn btn-navy" onclick="filterAttorneys('client', this)">Active Client</button>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div>
+      <div class="sidebar-section-title">Export</div>
+      <button class="btn btn-outline" onclick="exportCSV()">⬇ Export to CSV</button>
+    </div>
+
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main-content">
+
+    <!-- AI Research Panel -->
+    <div class="ai-panel">
+      <div class="ai-panel-header">
+        <div class="ai-panel-title">AI Research Assistant</div>
+        <span class="ai-badge">Powered by Claude</span>
+      </div>
+      <div class="ai-input-row">
+        <input type="text" id="ai-main-query"
+          placeholder="Ask about attorneys, practice areas, personalization tips, or draft a custom opening line for a specific attorney..."
+          onkeydown="if(event.key==='Enter') runAIMainResearch()" />
+        <button class="btn btn-gold" style="width:auto; white-space:nowrap;" onclick="runAIMainResearch()">Ask AI</button>
+      </div>
+      <div class="ai-loading" id="ai-loading">
+        <div class="spinner"></div>
+        RESEARCHING...
+      </div>
+      <div class="ai-results" id="ai-results"></div>
+    </div>
+
+    <!-- Attorney List Header -->
+    <div class="attorneys-header">
+      <div>
+        <div class="attorneys-title">Attorney Targets</div>
+        <div style="font-size:11px; color:var(--ltgray); margin-top:2px;">
+          <span id="filtered-count">0</span> attorneys shown
+          <span style="margin:0 8px; opacity:0.3;">|</span>
+          Goal: <strong style="color:var(--gold);">50</strong>
+          <span style="margin:0 8px; opacity:0.3;">|</span>
+          <div class="progress-bar" style="display:inline-block; width:120px; vertical-align:middle;">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" onclick="setView('grid', this)" title="Grid">⊞</button>
+        <button class="view-btn" onclick="setView('list', this)" title="List">☰</button>
+      </div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="search-box" style="margin-bottom:16px;">
+      <span class="search-icon">⚲</span>
+      <input type="text" id="search-input" placeholder="Search attorneys, firms, notes..."
+        oninput="searchAttorneys(this.value)" style="width:100%;" />
+    </div>
+
+    <!-- Cards Container -->
+    <div class="attorneys-grid" id="attorneys-container"></div>
+
+  </main>
+</div>
+
+<!-- ═══ ATTORNEY DETAIL MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal" id="modal">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+      <div>
+        <div class="modal-title" id="modal-name"></div>
+        <div class="modal-firm" id="modal-firm"></div>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:none;color:var(--ltgray);font-size:20px;cursor:pointer;line-height:1;">×</button>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Contact & Status</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="modal-field">
+          <label>Email</label>
+          <input type="text" id="modal-email" />
+        </div>
+        <div class="modal-field">
+          <label>Phone</label>
+          <input type="text" id="modal-phone" placeholder="(713) 000-0000" />
+        </div>
+        <div class="modal-field">
+          <label>Status</label>
+          <select id="modal-status">
+            <option value="new">Not Yet Contacted</option>
+            <option value="sent">Email Sent</option>
+            <option value="replied">Replied</option>
+            <option value="meeting">Meeting Scheduled</option>
+            <option value="client">Active Client</option>
+            <option value="declined">Declined</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Last Contact Date</label>
+          <input type="date" id="modal-date" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">AI Personalization Helper</div>
+      <div style="font-size:11px; color:var(--ltgray); margin-bottom:8px;">
+        Generate a personalized opening line for this attorney based on their practice focus.
+      </div>
+      <button class="modal-btn modal-btn-gold" onclick="generatePersonalization()" style="margin-bottom:4px;">
+        ⚡ Generate Opening Line
+      </button>
+      <div class="personalize-box" id="personalize-box"></div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Notes & Follow-up</div>
+      <div class="modal-field">
+        <label>Practice Notes</label>
+        <textarea id="modal-notes" rows="3"></textarea>
+      </div>
+      <div class="modal-field">
+        <label>Follow-up Action</label>
+        <input type="text" id="modal-followup" placeholder="e.g. Call on Tuesday, Send capability statement..." />
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="deleteAttorney()">Delete</button>
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn modal-btn-gold" onclick="saveAttorney()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────
+let attorneys = JSON.parse(localStorage.getItem('iai-attorneys') || '[]');
+// Seed with sample data if empty
+if (attorneys.length === 0) {
+  attorneys = [
+    { id: 1, name: "Ricardo A. Garcia", firm: "Garcia & Torres Criminal Defense", email: "rgarcia@garciatorres.com", county: "Harris", focus: "Federal", priority: "1", status: "new", notes: "Known for SDTX federal drug cases. Former AUSA. High profile.", followup: "", date: "", tags: ["federal","cja"] },
+    { id: 2, name: "Michelle L. Washington", firm: "Washington Law Group", email: "", county: "Harris", focus: "Both", priority: "1", status: "new", notes: "Criminal defense boutique. Takes CJA appointments.", followup: "", date: "", tags: ["state","cja"] },
+    { id: 3, name: "David P. Nguyen", firm: "Nguyen & Associates", email: "", county: "Fort Bend", focus: "State", priority: "2", status: "new", notes: "Spanish-speaking. Fort Bend County primarily.", followup: "", date: "", tags: ["state"] },
+    { id: 4, name: "Sandra K. Matthews", firm: "Matthews Criminal Law", email: "smatthews@matthewslaw.com", county: "Harris", focus: "Federal", priority: "1", status: "sent", notes: "SDTX specialist. White collar and narcotics.", followup: "Follow up Friday", date: "2026-03-10", tags: ["federal"] },
+    { id: 5, name: "James T. Okafor", firm: "Okafor Defense", email: "", county: "Harris", focus: "CJA", priority: "2", status: "replied", notes: "CJA panel. Interested in EyeDetect services.", followup: "Schedule call", date: "2026-03-12", tags: ["cja","state"] },
+  ];
+  save();
+}
+
+let currentFilter = 'all';
+let currentView = 'grid';
+let editingId = null;
+let searchTerm = '';
+
+function save() {
+  // Note: localStorage not available in this environment; using in-memory state
+  try { localStorage.setItem('iai-attorneys', JSON.stringify(attorneys)); } catch(e) {}
+}
+
+// ── Render ─────────────────────────────────────────────────
+function render() {
+  let filtered = attorneys.filter(a => {
+    if (currentFilter !== 'all' && a.status !== currentFilter) return false;
+    if (searchTerm) {
+      const s = searchTerm.toLowerCase();
+      return a.name.toLowerCase().includes(s) ||
+             a.firm.toLowerCase().includes(s) ||
+             (a.notes||'').toLowerCase().includes(s);
+    }
+    return true;
+  });
+
+  const container = document.getElementById('attorneys-container');
+  container.className = currentView === 'list' ? 'attorneys-list' : 'attorneys-grid';
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-state-icon">⚖</div>
+        <div class="empty-state-title">No attorneys found</div>
+        <div style="font-size:12px; margin-top:4px;">Add attorneys using the panel on the left or adjust your filters.</div>
+      </div>`;
+  } else {
+    container.innerHTML = filtered.map(a => renderCard(a)).join('');
+  }
+
+  document.getElementById('filtered-count').textContent = filtered.length;
+  document.getElementById('progress-fill').style.width = Math.min(100, (attorneys.length / 50) * 100) + '%';
+  updateStats();
+}
+
+function renderCard(a) {
+  const statusLabels = { new:'Not Contacted', sent:'Sent', replied:'Replied', meeting:'Meeting', client:'Client', declined:'Declined' };
+  const tags = (a.tags||[]).map(t => `<span class="tag ${t}">${t.toUpperCase()}</span>`).join('');
+  const priorityColor = a.priority == 1 ? 'priority-1' : a.priority == 2 ? 'priority-2' : 'priority-3';
+
+  if (currentView === 'list') {
+    return `
+    <div class="attorney-card list-view" style="padding-left:20px;">
+      <div class="card-priority ${priorityColor}"></div>
+      <div style="flex:1; min-width:0; padding-left:10px;">
+        <div class="attorney-name" style="font-size:13px;">${a.name}</div>
+        <div class="attorney-firm">${a.firm}</div>
+      </div>
+      <div style="font-size:11px; color:var(--ltgray); flex:0 0 100px;">${a.county} Co.</div>
+      <div style="flex:0 0 80px;">${tags}</div>
+      <span class="status-badge status-${a.status}">${statusLabels[a.status]||a.status}</span>
+      <div style="display:flex; gap:6px; flex-shrink:0;">
+        <button class="card-btn card-btn-gold" onclick="openModal(${a.id})">Edit</button>
+      </div>
+    </div>`;
+  }
+
+  return `
+  <div class="attorney-card" onclick="openModal(${a.id})">
+    <div class="card-priority ${priorityColor}"></div>
+    <div class="card-header">
+      <div>
+        <div class="attorney-name">${a.name}</div>
+        <div class="attorney-firm">${a.firm}</div>
+      </div>
+      <span class="status-badge status-${a.status}">${statusLabels[a.status]||a.status}</span>
+    </div>
+    <div class="card-meta">
+      <div class="meta-row"><span class="meta-icon">◆</span>${a.county} County · ${a.focus}</div>
+      ${a.email ? `<div class="meta-row"><span class="meta-icon">@</span>${a.email}</div>` : ''}
+      ${a.notes ? `<div class="meta-row"><span class="meta-icon">✎</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;">${a.notes}</span></div>` : ''}
+      ${a.followup ? `<div class="meta-row" style="color:var(--gold);"><span class="meta-icon">→</span>${a.followup}</div>` : ''}
+    </div>
+    <div class="card-tags">${tags}</div>
+    <div class="card-actions" onclick="event.stopPropagation()">
+      <button class="card-btn card-btn-gold" onclick="openModal(${a.id})">View / Edit</button>
+      <button class="card-btn card-btn-outline" onclick="quickStatus(${a.id}, 'sent')">Mark Sent</button>
+    </div>
+  </div>`;
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent   = attorneys.length;
+  document.getElementById('stat-sent').textContent    = attorneys.filter(a => ['sent','replied','meeting','client'].includes(a.status)).length;
+  document.getElementById('stat-replied').textContent = attorneys.filter(a => ['replied','meeting'].includes(a.status)).length;
+  document.getElementById('stat-clients').textContent = attorneys.filter(a => a.status === 'client').length;
+}
+
+// ── Add Attorney ────────────────────────────────────────────
+function addAttorney() {
+  const name = document.getElementById('f-name').value.trim();
+  const firm = document.getElementById('f-firm').value.trim();
+  if (!name || !firm) { alert('Name and firm are required.'); return; }
+  const focus = document.getElementById('f-focus').value;
+  const tags = [];
+  if (focus === 'Federal' || focus === 'Both') tags.push('federal');
+  if (focus === 'State' || focus === 'Both') tags.push('state');
+  if (focus === 'CJA') tags.push('cja');
+  attorneys.push({
+    id: Date.now(),
+    name,
+    firm,
+    email: document.getElementById('f-email').value.trim(),
+    county: document.getElementById('f-county').value,
+    focus,
+    priority: document.getElementById('f-priority').value,
+    status: 'new',
+    notes: document.getElementById('f-notes').value.trim(),
+    followup: '', date: '', tags
+  });
+  save();
+  ['f-name','f-firm','f-email','f-notes'].forEach(id => document.getElementById(id).value = '');
+  render();
+}
+
+// ── Modal ───────────────────────────────────────────────────
+function openModal(id) {
+  const a = attorneys.find(x => x.id === id);
+  if (!a) return;
+  editingId = id;
+  document.getElementById('modal-name').textContent  = a.name;
+  document.getElementById('modal-firm').textContent  = a.firm;
+  document.getElementById('modal-email').value       = a.email || '';
+  document.getElementById('modal-phone').value       = a.phone || '';
+  document.getElementById('modal-status').value      = a.status;
+  document.getElementById('modal-date').value        = a.date || '';
+  document.getElementById('modal-notes').value       = a.notes || '';
+  document.getElementById('modal-followup').value    = a.followup || '';
+  document.getElementById('personalize-box').classList.remove('visible');
+  document.getElementById('modal-overlay').classList.add('open');
+  // Store focus/county for AI
+  document.getElementById('modal-overlay').dataset.focus  = a.focus;
+  document.getElementById('modal-overlay').dataset.county = a.county;
+  document.getElementById('modal-overlay').dataset.name   = a.name;
+  document.getElementById('modal-overlay').dataset.firm   = a.firm;
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  editingId = null;
+}
+
+function saveAttorney() {
+  const a = attorneys.find(x => x.id === editingId);
+  if (!a) return;
+  a.email    = document.getElementById('modal-email').value;
+  a.phone    = document.getElementById('modal-phone').value;
+  a.status   = document.getElementById('modal-status').value;
+  a.date     = document.getElementById('modal-date').value;
+  a.notes    = document.getElementById('modal-notes').value;
+  a.followup = document.getElementById('modal-followup').value;
+  save();
+  render();
+  closeModal();
+}
+
+function deleteAttorney() {
+  if (!confirm('Remove this attorney from the list?')) return;
+  attorneys = attorneys.filter(x => x.id !== editingId);
+  save();
+  render();
+  closeModal();
+}
+
+function quickStatus(id, status) {
+  const a = attorneys.find(x => x.id === id);
+  if (a) { a.status = status; a.date = new Date().toISOString().split('T')[0]; save(); render(); }
+}
+
+// ── Filter & Search ─────────────────────────────────────────
+function filterAttorneys(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-group .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function searchAttorneys(val) {
+  searchTerm = val;
+  render();
+}
+
+function setView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+// ── AI Research ─────────────────────────────────────────────
+async function callClaude(prompt) {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      system: `You are an expert legal market researcher and business development strategist for Integrity Assessments Investigations (IAI), a licensed Texas private investigations firm. IAI is led by Dr. Celvin G. Walwyn — former International Police Commissioner of the Federation of St. Kitts and Nevis, former Deputy Commissioner of Police Operations for the U.S. Virgin Islands, retired Texas Police Chief (2026), Ph.D. in Public Safety from Capella University (Summa Cum Laude), certified EyeDetect Examiner, TCOLE licensed, CJA Panel Vendor (SDTX), and court-approved vendor in Harris and Fort Bend Counties. IAI serves criminal defense attorneys in the Southern District of Texas and Texas state courts. Be specific, practical, and direct. Keep responses concise — under 200 words unless asked for more.`,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await res.json();
+  return data.content?.[0]?.text || "No response received.";
+}
+
+async function runAIMainResearch() {
+  const query = document.getElementById('ai-main-query').value.trim();
+  if (!query) return;
+  const loading = document.getElementById('ai-loading');
+  const results = document.getElementById('ai-results');
+  loading.classList.add('visible');
+  results.classList.remove('visible');
+  try {
+    const text = await callClaude(query);
+    results.innerHTML = text.replace(/\n/g, '<br>');
+    results.classList.add('visible');
+  } catch(e) {
+    results.innerHTML = 'Unable to reach AI. Please check your connection.';
+    results.classList.add('visible');
+  }
+  loading.classList.remove('visible');
+}
+
+async function runAIResearch() {
+  const query = document.getElementById('ai-query').value.trim();
+  if (!query) return;
+  document.getElementById('ai-main-query').value = query;
+  await runAIMainResearch();
+}
+
+async function generatePersonalization() {
+  const overlay = document.getElementById('modal-overlay');
+  const name   = overlay.dataset.name;
+  const firm   = overlay.dataset.firm;
+  const focus  = overlay.dataset.focus;
+  const county = overlay.dataset.county;
+  const notes  = document.getElementById('modal-notes').value;
+
+  const box = document.getElementById('personalize-box');
+  box.innerHTML = '<em style="color:var(--gold);">Generating personalized opening line...</em>';
+  box.classList.add('visible');
+
+  const prompt = `Write a single personalized opening paragraph (3-4 sentences) for an outreach email from Dr. Celvin G. Walwyn of IAI to attorney ${name} of ${firm}. Focus: ${focus}. County: ${county}. Notes: ${notes || 'none'}. The paragraph should reference their specific practice focus and explain why IAI's unique background — particularly the command-level law enforcement experience and tri-level court approval — is directly relevant to their practice. Tone: professional, peer-to-peer, not salesy.`;
+
+  try {
+    const text = await callClaude(prompt);
+    box.innerHTML = text.replace(/\n/g, '<br>');
+  } catch(e) {
+    box.innerHTML = 'Unable to generate. Please try again.';
+  }
+}
+
+// ── Export CSV ──────────────────────────────────────────────
+function exportCSV() {
+  const headers = ['Name','Firm','Email','Phone','County','Focus','Priority','Status','Notes','Follow-up','Last Contact'];
+  const rows = attorneys.map(a => [
+    a.name, a.firm, a.email||'', a.phone||'', a.county, a.focus,
+    a.priority, a.status, (a.notes||'').replace(/,/g,''), (a.followup||'').replace(/,/g,''), a.date||''
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'IAI_Attorney_Outreach_List.csv'; a.click();
+}
+
+// ── Init ────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
